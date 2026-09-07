@@ -468,7 +468,7 @@
     });
   }
 
-  async function exportDataArchive() {
+  async function exportDataArchive(downloadOnly) {
     var exportedAt = new Date().toISOString();
     var exportedState = clone(state);
     exportedState.dataBackup = { lastExportDate: todayValue(), lastExportedAt: exportedAt };
@@ -480,13 +480,13 @@
       records: dailyHistory.slice(0, 60).map(function (record) { return clone(normalizeDailyRecord(record)); })
     };
     var content = DATA_EXPORT_HEADER + "\n" + JSON.stringify(payload);
-    var filename = "debut-office-backup-" + todayValue() + ".txt";
-    var file = new File([content], filename, { type: "text/plain;charset=utf-8" });
+    var filename = "新人出道减肥计划.txt";
+    var file = new File([content], filename, { type: "text/plain" });
     var shared = false;
-    if (navigator.share && navigator.canShare) {
+    if (downloadOnly !== true && navigator.share && navigator.canShare) {
       try {
         if (navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: "新人出道计划存档", text: "保存这份 TXT，下次可以继续训练进度。" });
+          await navigator.share({ files: [file] });
           shared = true;
         }
       } catch (error) {
@@ -501,7 +501,7 @@
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
-      window.setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+      window.setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
     }
     state.dataBackup = { lastExportDate: todayValue(), lastExportedAt: exportedAt };
     saveSettings();
@@ -3658,6 +3658,7 @@
     document.getElementById("dataSheetScrim").addEventListener("click", function () { closeSheet("dataSheet"); });
     document.getElementById("closeDataSheetButton").addEventListener("click", function () { closeSheet("dataSheet"); });
     document.getElementById("exportDataButton").addEventListener("click", exportDataArchive);
+    document.getElementById("downloadDataButton").addEventListener("click", function () { exportDataArchive(true); });
     document.getElementById("importDataButton").addEventListener("click", function () { document.getElementById("dataImportInput").click(); });
     document.getElementById("dataImportInput").addEventListener("change", function (event) {
       var file = event.target.files && event.target.files[0];

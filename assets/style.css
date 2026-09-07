@@ -168,6 +168,17 @@ svg {
   font-weight: 850;
 }
 
+.primary-button,
+.secondary-button {
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+.primary-button svg,
+.secondary-button svg {
+  flex-shrink: 0;
+}
+
 .primary-button {
   color: var(--ink);
   background: var(--lime);
@@ -656,13 +667,24 @@ svg {
 
 .onboarding-actions {
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
+  grid-template-columns: max-content minmax(0, 1fr);
   gap: 8px;
 }
 
 .onboarding-actions > button {
   width: 100%;
   min-width: 0;
+}
+
+.onboarding-actions .primary-button {
+  padding: 0 10px;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.onboarding-actions .primary-button svg {
+  width: 18px;
+  height: 18px;
 }
 
 .onboarding-actions .secondary-button {
@@ -4436,6 +4458,12 @@ body.is-subview .bottom-nav {
 
   .idol-name h2 {
     font-size: 24px;
+  }
+}
+
+@media (max-width: 360px) {
+  .onboarding-actions {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
