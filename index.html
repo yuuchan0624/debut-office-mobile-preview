@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>新人出道计划</title>
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body>
+  <div class="boot-screen" id="bootScreen" aria-live="polite">
+    <span class="boot-mark">D:01</span>
+    <p>正在读取本地档案</p>
+  </div>
+
+  <section class="onboarding-shell" id="onboardingShell" hidden>
+    <header class="onboarding-header">
+      <span class="brand-mark">D:01</span>
+      <div><strong>DEBUT OFFICE</strong><small>ROOKIE MANAGEMENT</small></div>
+    </header>
+
+    <main class="onboarding-thread" id="onboardingThread">
+      <div class="chat-day"><span>PROJECT D:01 · PRIVATE CHAT</span></div>
+
+      <button class="restore-entry" id="onboardingImportButton" type="button">
+        <span><i data-lucide="upload"></i></span>
+        <div><strong>已经训练过？导入存档继续</strong><small>选择上次导出的 TXT，恢复原来的出道进度</small></div>
+        <i data-lucide="chevron-right"></i>
+      </button>
+
+      <article class="chat-message" id="introMessage">
+        <span class="manager-avatar">M</span>
+        <div><small>经纪人 MIN · 刚刚</small><p>恭喜！新人企划通过了，你终于要出道了 🎉</p></div>
+      </article>
+      <article class="chat-message" id="rookieTransitionMessage" hidden>
+        <span class="manager-avatar">M</span>
+        <div><small>经纪人 MIN · 刚刚</small><p>从现在开始，你会以新人爱豆的身份进入出道准备期。训练、营业和粉丝变化都会被记录进企划。</p></div>
+      </article>
+      <article class="chat-message" id="profilePromptMessage" hidden>
+        <span class="manager-avatar">M</span>
+        <div><small>经纪人 MIN · 刚刚</small><p>正式排通告前，宣发组需要一份新人资料。填完整，我们先制作个人档案。</p></div>
+      </article>
+      <button class="chat-continue" id="introContinueButton" type="button" hidden>回复经纪人<i data-lucide="arrow-up-right"></i></button>
+
+      <section class="onboarding-form" id="profileSetupCard" aria-labelledby="profileSetupTitle" hidden>
+        <div class="form-heading"><div><small>ROOKIE PROFILE</small><h1 id="profileSetupTitle">个人资料</h1></div><span>01</span></div>
+
+        <button class="onboarding-avatar" id="onboardingAvatarButton" type="button">
+          <span id="onboardingAvatarFallback"><i data-lucide="user-round"></i></span>
+          <img id="onboardingAvatarPreview" alt="新人头像预览" hidden />
+          <div><strong>添加头像</strong><small>选填 · 仅保存在当前设备</small></div>
+          <i data-lucide="camera"></i>
+        </button>
+        <input id="onboardingAvatarInput" type="file" accept="image/*" hidden />
+
+        <div class="field-grid">
+          <label for="onboardingNameInput"><span>艺名</span><input id="onboardingNameInput" type="text" maxlength="12" placeholder="例如 LUMI" /></label>
+          <label for="onboardingHeightInput"><span>身高</span><div class="input-with-unit"><input id="onboardingHeightInput" type="text" inputmode="decimal" autocomplete="off" placeholder="165 或 1.65" /><b>cm</b></div></label>
+          <label class="weight-entry-field" for="onboardingWeightInput">
+            <span>当前体重</span>
+            <div class="input-with-unit"><input id="onboardingWeightInput" type="text" inputmode="decimal" autocomplete="off" placeholder="例如 62.4" aria-label="当前体重" /><b>kg</b></div>
+            <small class="field-help" id="onboardingWeightHint">统一按 kg 记录，填错后可在档案中修改。</small>
+          </label>
+        </div>
+
+        <fieldset class="favorite-food-fields">
+          <legend>喜欢的食物 <small>最多 3 种，用来制作奖励券</small></legend>
+          <input id="onboardingFoodInput1" type="text" maxlength="16" placeholder="例如 草莓冰淇淋" />
+          <input id="onboardingFoodInput2" type="text" maxlength="16" placeholder="例如 火锅（选填）" />
+          <input id="onboardingFoodInput3" type="text" maxlength="16" placeholder="例如 奶茶（选填）" />
+        </fieldset>
+        <p class="form-note"><i data-lucide="shield-check"></i>所有资料都只保存在当前设备，不会上传。</p>
+        <p class="form-error" id="profileSetupError" role="alert" hidden>请填写完整资料。</p>
+        <div class="onboarding-actions"><button class="secondary-button" id="backToIntroButton" type="button"><i data-lucide="arrow-left"></i>上一步</button><button class="primary-button" id="profileContinueButton" type="button">提交个人资料<i data-lucide="send"></i></button></div>
+      </section>
+
+      <article class="chat-message chat-message--self" id="profileSummaryMessage" hidden>
+        <div><small>我 · 刚刚</small><p id="profileSummaryText"></p></div>
+      </article>
+      <article class="chat-message" id="managerPauseMessage" hidden>
+        <span class="manager-avatar">M</span>
+        <div><small>经纪人 MIN · 正在输入</small><p>资料收到了。还有一件事。</p></div>
+      </article>
+      <article class="chat-message chat-message--strict" id="managerStrictMessage" hidden>
+        <span class="manager-avatar">M</span>
+        <div><small>经纪人 MIN · 刚刚</small><p>出道倒计时 30 天。现在开始，体重进度会直接影响你的新人关注度。</p></div>
+      </article>
+
+      <section class="target-plan-card" id="targetPlanCard" aria-labelledby="targetPlanTitle" hidden>
+        <div class="target-plan-card__head">
+          <div><small>DEBUT COUNTDOWN</small><h1 id="targetPlanTitle">D-30</h1></div>
+          <span class="status-chip">待确认</span>
+        </div>
+        <div class="target-date-row">
+          <div><span>默认出道日</span><strong id="defaultDebutDateLabel">--</strong></div>
+          <button class="text-button" id="objectDateButton" type="button">我有异议</button>
+        </div>
+        <label class="target-date-field" id="debutDateField" for="debutDateInput" hidden><span>重新安排出道日</span><input id="debutDateInput" type="date" /></label>
+        <label for="targetWeightInput"><span>你的目标体重</span><div class="input-with-unit input-with-unit--dark"><input id="targetWeightInput" type="number" min="30" max="250" step="0.1" inputmode="decimal" placeholder="例如 58.0" /><b>kg</b></div></label>
+        <div class="pace-check" id="paceCheck"><i data-lucide="calculator"></i><p><strong>等待目标</strong><span>填写后会检查所需节奏</span></p></div>
+        <p class="target-disclaimer">仅提供成人体重节奏参考，不构成医学建议。特殊健康情况请咨询专业人士。</p>
+        <p class="form-error form-error--dark" id="targetPlanError" hidden>请填写有效目标。</p>
+        <div class="onboarding-actions"><button class="secondary-button secondary-button--dark" id="backToProfileSetupButton" type="button"><i data-lucide="arrow-left"></i>上一步</button><button class="primary-button primary-button--dark" id="confirmTargetButton" type="button">确认出道计划<i data-lucide="check"></i></button></div>
+      </section>
+
+      <article class="chat-message" id="onboardingFinalMessage" hidden>
+        <span class="manager-avatar">M</span>
+        <div><small>经纪人 MIN · 刚刚</small><p id="onboardingFinalText">计划成立。先看一眼你的新人档案。</p></div>
+      </article>
+      <button class="chat-continue chat-continue--lime" id="openProfileButton" type="button" hidden>生成新人档案<i data-lucide="sparkles"></i></button>
+    </main>
+  </section>
+
+  <section class="daily-checkin" id="dailyCheckin" aria-labelledby="dailyCheckinTitle" hidden>
+    <header class="daily-checkin__header">
+      <div><span class="brand-mark">D:01</span><p><strong>MIN</strong><small>ROOKIE MANAGER</small></p></div>
+      <span id="dailyCheckinCountdown">D-29</span>
+    </header>
+    <main class="daily-checkin__thread">
+      <div class="chat-day"><span id="dailyCheckinDate">TODAY</span></div>
+      <article class="chat-message">
+        <span class="manager-avatar">M</span>
+        <div><small>经纪人 MIN · 今日首次打开</small><p id="dailyCheckinTitle">先报今天的体重，再进入工作台。</p></div>
+      </article>
+      <article class="carryover-message" id="carryoverMessage" hidden><i data-lucide="history"></i><p id="carryoverText"></p></article>
+      <section class="weight-checkin-card" id="weightCheckinCard">
+        <div><small>TODAY'S WEIGHT</small><strong>晨间报到</strong></div>
+        <label for="dailyWeightInput"><button id="dailyWeightMinus" type="button" aria-label="体重减少 0.1 千克"><i data-lucide="minus"></i></button><span><input id="dailyWeightInput" type="number" min="30" max="250" step="0.1" inputmode="decimal" /><b>kg</b></span><button id="dailyWeightPlus" type="button" aria-label="体重增加 0.1 千克"><i data-lucide="plus"></i></button></label>
+        <p id="weightTargetHint">今日计划线 -- kg</p>
+        <button class="primary-button" id="submitDailyWeightButton" type="button">提交今日体重<i data-lucide="arrow-up"></i></button>
+      </section>
+      <section class="morning-result" id="morningResult" hidden>
+        <div class="morning-result__status"><span id="morningStatusLabel">推进</span><strong id="morningStatusValue">-0.1kg</strong></div>
+        <p id="morningManagerReply"></p>
+        <div class="fan-settlement"><i data-lucide="users"></i><span>晨间粉丝</span><strong id="morningFanDelta">+0</strong></div>
+        <div class="reward-progress-mini"><span>奖励进度</span><div><i></i><i></i><i></i></div><strong id="morningRewardProgress">0/3</strong></div>
+        <p class="reward-rule-mini">点满 3 格，会从喜欢的食物里解锁一张给自己的虚拟奖励券。</p>
+        <button class="primary-button" id="enterWorkspaceButton" type="button">查看今日通告<i data-lucide="arrow-right"></i></button>
+      </section>
+    </main>
+  </section>
+
+  <div class="app-shell" id="mainApp" hidden>
+    <header class="top-bar">
+      <button class="brand-button" type="button" data-view-target="profile" aria-label="打开我的档案">
+        <span class="brand-mark">D:01</span>
+        <span><strong>DEBUT OFFICE</strong><small>ROOKIE DEPT.</small></span>
+      </button>
+      <button class="streak-button" id="streakButton" type="button" aria-label="查看连续达标天数"><i data-lucide="flame"></i><strong id="streakCount">0</strong><small>DAYS</small></button>
+    </header>
+
+    <main class="view-stack">
+      <section class="app-view is-active" data-view="today" aria-labelledby="todayTitle">
+        <button class="fan-hero" type="button" data-view-target="fan">
+          <span class="fan-hero__icon"><i data-lucide="users"></i></span>
+          <span class="fan-hero__copy"><small>TRAINING FANS</small><em class="fan-hero__hint">在出道前多多积累粉丝吧</em><span class="fan-hero__stats"><strong id="fanCount">0</strong><b id="todayFanDelta">今天 +0</b></span></span>
+          <i data-lucide="chevron-right"></i>
+        </button>
+
+        <div class="page-heading">
+          <div><p class="eyebrow" id="todayDateLabel">TODAY</p><h1 id="todayTitle">今天的出道准备</h1></div>
+          <span class="status-chip" id="todayStatusChip">基线日</span>
+        </div>
+
+        <section class="weight-board" aria-labelledby="weightBoardTitle">
+          <div class="weight-board__top"><div><small id="weightBoardTitle">DEBUT COUNTDOWN</small><strong id="homeCountdown">D-30</strong></div><span id="homeDebutDate">--</span></div>
+          <div class="weight-route">
+            <div class="weight-route__point weight-route__point--current"><small>当前</small><button class="weight-route__edit" id="editHomeWeightButton" type="button" aria-label="修改当前体重" title="修改当前体重"><strong><span id="homeCurrentWeight">--</span><b>kg</b></strong><i data-lucide="pencil"></i></button></div>
+            <i class="weight-route__arrow" data-lucide="arrow-right"></i>
+            <div class="weight-route__point weight-route__point--target"><small>目标</small><strong><span id="homeTargetWeight">--</span><b>kg</b></strong></div>
+          </div>
+          <div class="daily-pace"><span><small>从今天起平均每天</small><strong><span id="dailyWeightTarget">--</span><b>kg</b></strong></span><p id="dailyWeightFormula">等待今日体重</p></div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="homeProgressBar"></span></div>
+          <div class="progress-copy"><span id="homeProgressLabel">完成 0%</span><span id="homeRemainingLabel">距离目标 --</span></div>
+        </section>
+
+        <button class="manager-strip" id="managerMessage" type="button" data-view-target="manager">
+          <span class="manager-avatar">M</span>
+          <span><small>08:30 · 经纪人 MIN</small><strong id="managerText">基础资料已建档，今天先熟悉训练流程。</strong></span>
+          <i data-lucide="chevron-right"></i>
+        </button>
+
+        <section class="call-sheet" aria-labelledby="taskTitle">
+          <div class="section-title-row"><div><p class="eyebrow">TODAY'S CALL SHEET</p><h2 id="taskTitle">今日通告</h2></div><div class="call-sheet__actions"><strong id="taskDoneCount">0/3</strong><button class="text-button" id="editCallSheetButton" type="button">调整</button></div></div>
+          <p class="call-sheet__rule" id="callSheetRule">完成任意 2 项，今日通告即达标</p>
+          <div class="call-sheet__list" id="callSheetList"></div>
+        </section>
+        <button class="primary-button page-primary" type="button" data-view-target="record"><i data-lucide="notebook-pen"></i>去记录今天</button>
+      </section>
+
+      <section class="app-view" data-view="record" aria-labelledby="recordTitle">
+        <div class="page-heading page-heading--compact"><div><p class="eyebrow">DAILY LOG</p><h1 id="recordTitle">今天的记录</h1></div><span class="status-chip" id="recordCountdown">D-30</span></div>
+
+        <section class="record-block record-block--weight" id="weightRecordBlock">
+          <div class="record-block__heading"><span class="record-icon record-icon--lime"><i data-lucide="scale"></i></span><div><small>WEIGHT</small><h2>今日体重</h2></div><button class="text-button" id="editTodayWeightButton" type="button">修改</button></div>
+          <div class="weight-summary"><strong><span id="recordWeightValue">--</span><b>kg</b></strong><span id="recordWeightStatus">今日基线</span></div>
+        </section>
+
+        <section class="record-block" id="mealRecordBlock">
+          <div class="record-block__heading"><span class="record-icon record-icon--coral"><i data-lucide="utensils"></i></span><div><small>MEALS</small><h2>三餐记录</h2></div><span id="mealRecordCount">0/3</span></div>
+          <div class="meal-grid">
+            <button class="meal-button" type="button" data-meal="breakfast"><small>早餐</small><strong>待记录</strong><em>热量选填</em><i data-lucide="plus"></i></button>
+            <button class="meal-button" type="button" data-meal="lunch"><small>午餐</small><strong>待记录</strong><em>热量选填</em><i data-lucide="plus"></i></button>
+            <button class="meal-button" type="button" data-meal="dinner"><small>晚餐</small><strong>待记录</strong><em>热量选填</em><i data-lucide="plus"></i></button>
+          </div>
+        </section>
+
+        <section class="record-block" id="workoutRecordBlock">
+          <div class="record-block__heading"><span class="record-icon record-icon--blue"><i data-lucide="dumbbell"></i></span><div><small>WORKOUT</small><h2>运动记录</h2></div><button class="text-button" id="editWorkoutPlanButton" type="button">改目标</button></div>
+          <div class="workout-plan-summary"><span>今日计划</span><strong id="workoutPlanText">1 项 · 共 20 分钟</strong></div>
+          <div class="workout-entry-list" id="workoutEntryList"></div>
+          <div class="workout-meter"><span id="workoutMeterBar"></span></div>
+          <p class="workout-hint" id="workoutHint">逐项打卡，全部完成后才算完成运动通告。</p>
+        </section>
+
+        <section class="record-block water-record-block" id="waterRecordBlock">
+          <div class="record-block__heading"><span class="record-icon record-icon--water"><i data-lucide="glass-water"></i></span><div><small>HYDRATION</small><h2>今日喝水</h2></div><button class="text-button" id="editWaterGoalButton" type="button">改目标</button></div>
+          <div class="water-tracker">
+            <div class="water-column" id="waterColumn" role="img" aria-label="今日喝水进度"><div class="water-column__fill" id="waterColumnFill"><i></i><i></i><i></i></div><span id="waterMark100">2L</span><span id="waterMark75">1.5</span><span id="waterMark50">1</span><span id="waterMark25">0.5</span></div>
+            <div class="water-controls"><div class="water-total"><small>今日累计</small><strong><span id="waterAmountValue">0</span><b>ml</b></strong><p>训练目标 <span id="waterGoalLabel">2000</span>ml · <b id="waterRecordStatus">0%</b></p></div><div class="water-quick-actions"><button type="button" data-water-add="250">+250</button><button type="button" data-water-add="500">+500</button></div><label for="waterAmountInput"><span>手动填写</span><div class="input-with-unit"><input id="waterAmountInput" type="number" min="0" max="8000" step="50" inputmode="numeric" placeholder="0" /><b>ml</b></div></label><button class="secondary-button" id="saveWaterButton" type="button"><i data-lucide="check"></i>保存喝水量</button></div>
+          </div>
+          <p class="water-note">按天气、运动量和身体感受调整目标，不必为了数字勉强喝水。</p>
+        </section>
+
+        <section class="record-block measurement-record-block" id="measurementRecordBlock">
+          <div class="record-block__heading"><span class="record-icon record-icon--measurement"><i data-lucide="ruler"></i></span><div><small>BODY MEASUREMENTS · OPTIONAL</small><h2>每日围度</h2></div><span id="measurementTaskState">选填</span></div>
+          <div class="measurement-grid">
+            <label for="waistInput"><span>腰围</span><div class="input-with-unit"><input id="waistInput" type="number" min="20" max="250" step="0.1" inputmode="decimal" placeholder="--" /><b>cm</b></div></label>
+            <label for="thighInput"><span>大腿围</span><div class="input-with-unit"><input id="thighInput" type="number" min="15" max="150" step="0.1" inputmode="decimal" placeholder="--" /><b>cm</b></div></label>
+            <label for="calfInput"><span>小腿围</span><div class="input-with-unit"><input id="calfInput" type="number" min="10" max="100" step="0.1" inputmode="decimal" placeholder="--" /><b>cm</b></div></label>
+            <label for="bustInput"><span>胸围</span><div class="input-with-unit"><input id="bustInput" type="number" min="30" max="250" step="0.1" inputmode="decimal" placeholder="--" /><b>cm</b></div></label>
+          </div>
+          <div class="measurement-other"><input id="otherMeasurementName" type="text" maxlength="12" placeholder="其他部位（选填）" /><div class="input-with-unit"><input id="otherMeasurementValue" type="number" min="5" max="300" step="0.1" inputmode="decimal" placeholder="--" /><b>cm</b></div></div>
+          <p class="form-error" id="measurementError" hidden>围度请填写合理的厘米数。</p>
+          <button class="secondary-button" id="saveMeasurementsButton" type="button"><i data-lucide="save"></i>保存今日围度</button>
+        </section>
+
+        <section class="record-block custom-task-record-block" id="customTaskRecordBlock" hidden>
+          <div class="record-block__heading"><span class="record-icon record-icon--custom"><i data-lucide="list-checks"></i></span><div><small>CUSTOM CALLS</small><h2>自定义通告</h2></div><span id="customTaskRecordCount">0/0</span></div>
+          <div class="custom-task-checklist" id="customTaskRecordList"></div>
+        </section>
+
+        <section class="record-block" id="photoRecordBlock">
+          <div class="record-block__heading"><span class="record-icon record-icon--yellow"><i data-lucide="camera"></i></span><div><small>DAILY PHOTO · OPTIONAL</small><h2>今日营业照</h2></div></div>
+          <button class="business-photo-button" id="businessPhotoButton" type="button"><span id="businessPhotoEmpty"><i data-lucide="image-plus"></i><strong>上传一张营业照</strong><small>保存进个人训练相册</small></span><img id="businessPhotoPreview" alt="今日营业照预览" hidden /></button>
+          <input id="businessPhotoInput" type="file" accept="image/*" hidden />
+          <button class="remove-photo-button" id="removeBusinessPhotoButton" type="button" hidden><i data-lucide="trash-2"></i>移除营业照</button>
+        </section>
+
+        <div class="sealed-banner" id="sealedBanner" hidden><i data-lucide="lock-keyhole"></i><div><strong>今日档案已封存</strong><span>明天首次打开时会进入新的晨间报到。</span></div></div>
+        <button class="primary-button page-primary" id="finishDayButton" type="button"><i data-lucide="circle-check-big"></i>结束今日训练</button>
+      </section>
+
+      <section class="app-view" data-view="progress" aria-labelledby="progressTitle">
+        <div class="page-heading page-heading--compact"><div><p class="eyebrow">DEBUT TRACK</p><h1 id="progressTitle">出道进度</h1></div><span class="archive-count" id="archiveCount">0/60</span></div>
+
+        <section class="chart-panel" aria-labelledby="weightTrendTitle">
+          <div class="chart-heading"><div><small>最近 30 天</small><h2 id="weightTrendTitle">体重趋势</h2></div><strong id="weightTrendDelta">0.0 kg</strong></div>
+          <div class="chart-legend"><span><i class="legend-dot legend-dot--actual"></i>实际</span><span><i class="legend-dot legend-dot--goal"></i>目标</span></div>
+          <svg class="trend-chart" id="weightChart" viewBox="0 0 340 172" role="img" aria-label="体重趋势图"></svg>
+          <div class="chart-empty" id="weightChartEmpty"><i data-lucide="chart-no-axes-combined"></i><span>完成第二次称重后生成趋势</span></div>
+        </section>
+
+        <section class="calendar-panel" aria-labelledby="calendarTitle">
+          <div class="section-title-row"><div><p class="eyebrow">DAILY STATUS</p><h2 id="calendarTitle">每日达标日历</h2></div><span>近60天 · 点击查看</span></div>
+          <div class="calendar-legend"><span><i class="calendar-dot calendar-dot--achieved"></i>达标</span><span><i class="calendar-dot calendar-dot--progress"></i>推进</span><span><i class="calendar-dot calendar-dot--behind"></i>落后</span></div>
+          <div class="status-calendar" id="statusCalendar"></div>
+        </section>
+
+        <section class="chart-panel" aria-labelledby="fanTrendTitle">
+          <div class="chart-heading"><div><small>累计变化</small><h2 id="fanTrendTitle">粉丝增长</h2></div><strong id="fanTrendTotal">0</strong></div>
+          <svg class="trend-chart trend-chart--fans" id="fanChart" viewBox="0 0 340 150" role="img" aria-label="粉丝增长曲线"></svg>
+          <div class="chart-empty" id="fanChartEmpty"><i data-lucide="users"></i><span>完成晨间结算后生成曲线</span></div>
+        </section>
+      </section>
+
+      <section class="app-view" data-view="profile" aria-labelledby="profileTitle">
+        <div class="page-heading page-heading--compact"><div><p class="eyebrow">IDOL FILE</p><h1 id="profileTitle">我的档案</h1></div><button class="icon-button icon-button--plain" id="editProfileButton" type="button" aria-label="编辑档案"><i data-lucide="square-pen"></i></button></div>
+
+        <section class="idol-card" aria-label="新人档案海报">
+          <div class="idol-card__stripe">ROOKIE DEBUT PROJECT · MEMBER 01</div>
+          <div class="idol-card__body">
+            <button class="idol-portrait" id="profileAvatarButton" type="button" aria-label="更换档案头像"><img class="idol-portrait-default" id="profileAvatarArt" src="./assets/rookie-default-avatar.svg" alt="默认新人头像" /><img id="profileAvatarImage" alt="我的档案头像" hidden /><span class="avatar-edit-badge"><i data-lucide="camera"></i></span></button>
+            <div class="idol-name"><small>STAGE NAME</small><h2 data-stage-name>LUMI</h2><span>ROOKIE ARTIST</span><div class="idol-name__meta"><b id="profileHeight">-- CM</b><b id="profileFavorite">FAV · --</b></div></div>
+          </div>
+          <div class="idol-card__stats"><div><small>DEBUT</small><strong id="profileDebutDate">--</strong></div><div><small>GOAL</small><strong id="profileGoalWeight">-- KG</strong></div><div><small>FANS</small><strong id="profileFanCount">0</strong></div></div>
+        </section>
+
+        <button class="primary-button profile-enter-button" id="enterTodayButton" type="button"><i data-lucide="calendar-check"></i>档案确认，进入今日</button>
+
+        <section class="profile-list" aria-label="档案功能">
+          <button type="button" data-profile-action="plan"><span class="profile-list__icon profile-list__icon--lime"><i data-lucide="target"></i></span><span><strong>当前出道计划</strong><small id="profilePlanSummary">等待建档</small></span><i data-lucide="chevron-right"></i></button>
+          <button type="button" data-profile-action="rewards"><span class="profile-list__icon profile-list__icon--coral"><i data-lucide="ticket"></i></span><span><strong>我的奖励</strong><small id="profileRewardSummary">进度 0/3 · 0 张券</small></span><i data-lucide="chevron-right"></i></button>
+          <button type="button" data-profile-action="album"><span class="profile-list__icon profile-list__icon--blue"><i data-lucide="images"></i></span><span><strong>训练相册</strong><small id="profileAlbumSummary">0 张营业照</small></span><i data-lucide="chevron-right"></i></button>
+          <button type="button" data-profile-action="manager"><span class="profile-list__icon profile-list__icon--yellow"><i data-lucide="messages-square"></i></span><span><strong>经纪人记录</strong><small>每日提醒与聊天时间线</small></span><i data-lucide="chevron-right"></i></button>
+          <button type="button" data-profile-action="data"><span class="profile-list__icon profile-list__icon--data"><i data-lucide="folder-sync"></i></span><span><strong>导入 / 导出数据</strong><small id="profileBackupSummary">用 TXT 保存并恢复训练档案</small></span><i data-lucide="chevron-right"></i></button>
+        </section>
+
+        <section class="past-plans" id="pastPlansSection" hidden><div class="section-title-row"><div><p class="eyebrow">PAST PROJECTS</p><h2>历史企划</h2></div></div><div id="pastPlansList"></div></section>
+        <section class="storage-note"><i data-lucide="shield-check"></i><div><strong>自动保存 + TXT 手动备份</strong><span>平台可能清理本地数据，建议每天收工后导出一次。</span></div></section>
+      </section>
+
+      <section class="app-view manager-view" data-view="manager" aria-labelledby="managerTitle">
+        <header class="subview-header"><button class="icon-button icon-button--plain" type="button" data-view-target="today" aria-label="返回今日"><i data-lucide="arrow-left"></i></button><div><small>ROOKIE MANAGER</small><h1 id="managerTitle">MIN</h1></div><span class="online-dot" aria-label="经纪人在线"></span></header>
+        <section class="manager-chat" id="managerChatLog" aria-label="经纪人聊天记录"></section>
+        <div class="quick-replies" aria-label="快捷回复"><button type="button" data-manager-reply="received">收到</button><button type="button" data-manager-reply="promise">今天会完成</button><button type="button" data-manager-reply="adjust">调整今日目标</button></div>
+      </section>
+
+      <section class="app-view fan-view" data-view="fan" aria-labelledby="fanTitle">
+        <header class="subview-header"><button class="icon-button icon-button--plain" type="button" data-view-target="today" aria-label="返回今日"><i data-lucide="arrow-left"></i></button><div><small>ROOKIE COMMUNITY</small><h1 id="fanTitle">粉丝社区</h1></div><span></span></header>
+        <section class="fan-profile"><span class="fan-profile-avatar" data-user-avatar>L</span><div><small data-stage-label>训练初期</small><strong><span data-stage-name>LUMI</span> OFFICIAL</strong><p><span id="fanCountSecondary">0</span> 位训练期粉丝</p></div></section>
+        <section class="fan-stage-banner"><span id="fanStageCode">STAGE 01</span><div><small>当前阶段</small><strong id="fanStageTitle">还没有人认识你</strong><p id="fanStageCopy">发出第一份训练档案，等第一个人来叫你姐姐。</p></div></section>
+        <article class="community-post" id="communityPost"><header><span class="post-avatar" data-user-avatar>L</span><div><strong><span data-stage-name>LUMI</span><i data-lucide="badge-check"></i></strong><small id="communityPostTime">今日 · Artist</small></div></header><p id="communityPostCopy">今天还在练习室。等收工后，再来交今天的训练日记。</p><div class="community-media" id="communityMedia"><span><small>DAILY REPORT</small><strong id="communityMediaScore">0/3</strong><b id="communityMediaCountdown">D-30</b></span><img id="communityPhoto" alt="最新营业照" hidden /></div></article>
+        <section class="fan-comments"><div class="section-title-row"><div><p class="eyebrow">FAN REPLIES</p><h2>阶段评论</h2></div><span id="fanCommentCount">0</span></div><div id="fanCommentList"></div></section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主导航">
+      <button class="nav-item is-active" type="button" data-view-target="today"><i data-lucide="house"></i><span>今日</span></button>
+      <button class="nav-item" type="button" data-view-target="record"><i data-lucide="notebook-pen"></i><span>记录</span></button>
+      <button class="nav-item" type="button" data-view-target="progress"><i data-lucide="chart-no-axes-combined"></i><span>进度</span></button>
+      <button class="nav-item" type="button" data-view-target="profile"><i data-lucide="badge-id-card"></i><span>档案</span></button>
+    </nav>
+  </div>
+
+  <div class="sheet-overlay" id="mealSheet" role="dialog" aria-modal="true" aria-labelledby="mealSheetTitle" hidden>
+    <button class="sheet-scrim" id="mealSheetScrim" type="button" aria-label="关闭饮食记录"></button>
+    <section class="bottom-sheet"><header class="sheet-header"><div><p class="eyebrow">MEAL LOG</p><h2 id="mealSheetTitle">记录早餐</h2></div><button class="icon-button" id="closeMealSheetButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <button class="meal-photo-button" id="mealPhotoButton" type="button"><span id="mealPhotoEmpty"><i data-lucide="camera"></i><strong>添加食物照片</strong><small>选填 · 仅保存在当前设备</small></span><img id="mealPhotoPreview" alt="食物照片预览" hidden /></button>
+      <input id="mealPhotoInput" type="file" accept="image/*" hidden />
+      <button class="remove-photo-button" id="removeMealPhotoButton" type="button" hidden><i data-lucide="trash-2"></i>移除照片</button>
+      <label class="textarea-field" for="mealNoteInput"><span>吃了什么 <b>必填</b></span><textarea id="mealNoteInput" maxlength="80" rows="3" placeholder="例如：鸡蛋、牛奶和一片全麦面包"></textarea><small><span id="mealNoteCount">0</span>/80</small></label>
+      <label for="mealCaloriesInput"><span>这餐热量 <b>选填</b></span><div class="input-with-unit"><input id="mealCaloriesInput" type="number" min="0" max="5000" step="1" inputmode="numeric" placeholder="不知道可以不填" /><b>kcal</b></div></label>
+      <p class="form-error" id="mealSheetError" hidden>请先写下这餐吃了什么。</p>
+      <div class="sheet-actions"><button class="secondary-button" id="deleteMealButton" type="button" hidden>删除记录</button><button class="primary-button" id="saveMealButton" type="button"><i data-lucide="save"></i>保存这餐</button></div>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="profileEditSheet" role="dialog" aria-modal="true" aria-labelledby="profileEditTitle" hidden>
+    <button class="sheet-scrim" id="profileEditScrim" type="button" aria-label="关闭档案编辑"></button>
+    <section class="bottom-sheet"><header class="sheet-header"><div><p class="eyebrow">EDIT IDOL FILE</p><h2 id="profileEditTitle">编辑档案</h2></div><button class="icon-button" id="closeProfileEditButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <button class="avatar-editor" id="avatarEditorButton" type="button"><span><b id="avatarEditorFallback" aria-label="默认新人头像"></b><img id="avatarEditorImage" alt="头像预览" hidden /></span><div><strong>更换头像</strong><small>照片不会上传</small></div><i data-lucide="image-plus"></i></button>
+      <input id="avatarFileInput" type="file" accept="image/*" hidden />
+      <button class="text-button avatar-remove" id="removeAvatarButton" type="button" hidden>恢复默认头像</button>
+      <label for="profileNameInput"><span>艺名</span><input id="profileNameInput" type="text" maxlength="12" /></label>
+      <label for="profileHeightInput"><span>身高</span><div class="input-with-unit"><input id="profileHeightInput" type="text" inputmode="decimal" autocomplete="off" aria-label="身高" /><b>cm</b></div></label>
+      <label class="profile-weight-editor" for="profileStartWeightInput"><span>建档体重</span><div class="input-with-unit"><input id="profileStartWeightInput" type="text" inputmode="decimal" autocomplete="off" aria-label="建档体重" /><b>kg</b></div><small class="field-help" id="profileWeightLockNote">用于纠正建档时填错的数据；每日体重请在今日页修改。</small></label>
+      <div class="profile-health-note" id="profileHealthNote" hidden><i data-lucide="heart-pulse"></i><span></span></div>
+      <fieldset class="favorite-food-fields"><legend>喜欢的食物 <small>未来奖励从这里抽取</small></legend><input id="favoriteFoodEditInput1" type="text" maxlength="16" /><input id="favoriteFoodEditInput2" type="text" maxlength="16" /><input id="favoriteFoodEditInput3" type="text" maxlength="16" /></fieldset>
+      <p class="form-error" id="profileEditError" hidden>请保留艺名和至少一种喜欢的食物。</p>
+      <button class="primary-button sheet-primary-button" id="saveProfileEditButton" type="button"><i data-lucide="save"></i>保存档案</button>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="workoutPlanSheet" role="dialog" aria-modal="true" aria-labelledby="workoutPlanSheetTitle" hidden>
+    <button class="sheet-scrim" id="workoutPlanScrim" type="button" aria-label="关闭运动目标"></button>
+    <section class="bottom-sheet bottom-sheet--picker"><header class="sheet-header"><div><p class="eyebrow">TODAY'S TARGET</p><h2 id="workoutPlanSheetTitle">调整今日运动</h2></div><button class="icon-button" id="closeWorkoutPlanButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <div class="workout-goal-plan-list" id="workoutGoalPlanList"></div>
+      <div class="workout-plan-add-title"><strong>增加运动目标</strong><small>最多 8 项</small></div>
+      <div class="editable-select-field"><label for="workoutPlanType"><span>运动类型</span></label><div class="editable-select" data-workout-picker><input id="workoutPlanType" type="text" maxlength="30" autocomplete="off" placeholder="输入或选择运动" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="workoutPlanMenu" /><button class="editable-select__toggle" id="workoutPlanMenuButton" type="button" aria-label="打开目标运动选项"><i data-lucide="chevron-down"></i></button><div class="editable-select__menu" id="workoutPlanMenu" role="listbox" hidden></div></div></div>
+      <label for="workoutPlanMinutes"><span>目标分钟</span><div class="input-with-unit"><input id="workoutPlanMinutes" type="number" min="5" max="300" step="5" inputmode="numeric" /><b>min</b></div></label>
+      <button class="secondary-button" id="addWorkoutGoalButton" type="button"><i data-lucide="plus"></i>添加到今日计划</button>
+      <p class="sheet-note">确认后，记录页会按这份清单逐项打卡；这份计划也会成为明天的默认建议。</p>
+      <button class="primary-button sheet-primary-button" id="saveWorkoutPlanButton" type="button"><i data-lucide="check"></i>确认今日计划</button>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="callSheetEditor" role="dialog" aria-modal="true" aria-labelledby="callSheetEditorTitle" hidden>
+    <button class="sheet-scrim" id="callSheetEditorScrim" type="button" aria-label="关闭通告设置"></button>
+    <section class="bottom-sheet bottom-sheet--tall"><header class="sheet-header"><div><p class="eyebrow">DAILY CALL SHEET</p><h2 id="callSheetEditorTitle">调整今日通告</h2></div><button class="icon-button" id="closeCallSheetEditorButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <p class="call-sheet-editor-note">每天至少保留 2 项。完成任意 2 项，今日通告就算达标。</p>
+      <div class="call-sheet-options" id="callSheetBuiltinOptions"></div>
+      <div class="custom-call-editor"><div><strong>自定义通告</strong><small>最多添加 5 项</small></div><div id="customCallSheetDraftList"></div><label for="customCallSheetInput"><span>新增一项</span><div><input id="customCallSheetInput" type="text" maxlength="20" placeholder="例如 23:30 前睡觉" /><button class="icon-button" id="addCustomCallSheetButton" type="button" aria-label="添加自定义通告"><i data-lucide="plus"></i></button></div></label></div>
+      <p class="form-error" id="callSheetEditorError" hidden>请至少保留 2 项通告。</p>
+      <button class="primary-button sheet-primary-button" id="saveCallSheetButton" type="button"><i data-lucide="check"></i>确认今日通告</button>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="waterGoalSheet" role="dialog" aria-modal="true" aria-labelledby="waterGoalSheetTitle" hidden>
+    <button class="sheet-scrim" id="waterGoalScrim" type="button" aria-label="关闭喝水目标"></button>
+    <section class="bottom-sheet"><header class="sheet-header"><div><p class="eyebrow">HYDRATION TARGET</p><h2 id="waterGoalSheetTitle">调整喝水目标</h2></div><button class="icon-button" id="closeWaterGoalButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <label for="waterGoalInput"><span>今日目标</span><div class="input-with-unit"><input id="waterGoalInput" type="number" min="300" max="5000" step="100" inputmode="numeric" /><b>ml</b></div></label>
+      <p class="sheet-note">建议结合天气、活动量和身体情况设置；今天保存的数值会成为明天的默认目标。</p>
+      <p class="form-error" id="waterGoalError" hidden>请输入 300～5000ml。</p>
+      <button class="primary-button sheet-primary-button" id="saveWaterGoalButton" type="button"><i data-lucide="check"></i>保存喝水目标</button>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="dataSheet" role="dialog" aria-modal="true" aria-labelledby="dataSheetTitle" hidden>
+    <button class="sheet-scrim" id="dataSheetScrim" type="button" aria-label="关闭数据备份"></button>
+    <section class="bottom-sheet"><header class="sheet-header"><div><p class="eyebrow">LOCAL DATA BACKUP</p><h2 id="dataSheetTitle">导入 / 导出数据</h2></div><button class="icon-button" id="closeDataSheetButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <div class="data-backup-intro"><i data-lucide="file-key-2"></i><p><strong>请将 TXT 存档保存到手机文件中</strong><span>下次打开时选择这份文件导入，继续之前的进度。</span></p></div>
+      <div class="data-backup-actions"><button class="primary-button" id="exportDataButton" type="button"><i data-lucide="download"></i>保存存档文档（TXT）</button><button class="secondary-button" id="importDataButton" type="button"><i data-lucide="upload"></i>导入 TXT 存档</button></div>
+      <p class="data-backup-status" id="dataBackupStatus">尚未在本设备导出过存档</p>
+      <p class="sheet-note">存档只在你的设备与所选文件之间流转，不会上传到网络。导入会替换当前档案。</p>
+    </section>
+  </div>
+  <input id="dataImportInput" type="file" accept=".txt,text/plain,application/json" hidden />
+
+  <div class="sheet-overlay" id="planEditSheet" role="dialog" aria-modal="true" aria-labelledby="planEditTitle" hidden>
+    <button class="sheet-scrim" id="planEditScrim" type="button" aria-label="关闭计划设置"></button>
+    <section class="bottom-sheet"><header class="sheet-header"><div><p class="eyebrow">DEBUT PLAN</p><h2 id="planEditTitle">当前出道计划</h2></div><button class="icon-button" id="closePlanEditButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <div class="edit-limit-note"><i data-lucide="triangle-alert"></i><p>目标体重和出道日期各只能修改一次。确认后无法再次更改。</p></div>
+      <label for="editTargetWeight"><span>目标体重 <b id="targetEditState">可修改 1 次</b></span><div class="input-with-unit"><input id="editTargetWeight" type="number" min="30" max="250" step="0.1" inputmode="decimal" /><b>kg</b></div></label>
+      <label for="editDebutDate"><span>出道日期 <b id="dateEditState">可修改 1 次</b></span><input id="editDebutDate" type="date" /></label>
+      <div class="pace-check" id="editPaceCheck"><i data-lucide="calculator"></i><p><strong>当前计划</strong><span>修改后只重算未来目标线</span></p></div>
+      <p class="form-error" id="planEditError" hidden>请检查目标体重与日期。</p>
+      <button class="primary-button sheet-primary-button" id="savePlanEditButton" type="button"><i data-lucide="save"></i>保存计划修改</button>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="rewardSheet" role="dialog" aria-modal="true" aria-labelledby="rewardSheetTitle" hidden>
+    <button class="sheet-scrim" id="rewardSheetScrim" type="button" aria-label="关闭我的奖励"></button>
+    <section class="bottom-sheet bottom-sheet--tall"><header class="sheet-header"><div><p class="eyebrow">MY REWARD WALLET</p><h2 id="rewardSheetTitle">我的奖励</h2></div><button class="icon-button" id="closeRewardSheetButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <div class="reward-progress-card"><div><small>NEXT REWARD</small><strong id="rewardProgressLabel">0/3</strong></div><div class="reward-progress-dots" id="rewardProgressDots"><i></i><i></i><i></i></div><p>晨间体重达标点亮 1 格，未达标退 1 格；点满 3 格解锁一张。</p></div>
+      <div class="reward-explainer"><i data-lucide="info"></i><p>奖励内容会从你填写的“喜欢的食物”中抽取。这是给自己的虚拟奖励，不是商家代金券，想使用时再点开。</p></div>
+      <div class="reward-wallet" id="rewardWallet"></div>
+      <div class="empty-list" id="rewardEmpty"><i data-lucide="lock-keyhole"></i><strong>奖励券还没有解锁</strong><span>先在晨间称重中点亮进度，累计点满 3 格后会出现第一张券。</span></div>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="albumSheet" role="dialog" aria-modal="true" aria-labelledby="albumTitle" hidden>
+    <button class="sheet-scrim" id="albumScrim" type="button" aria-label="关闭训练相册"></button>
+    <section class="bottom-sheet bottom-sheet--tall"><header class="sheet-header"><div><p class="eyebrow">TRAINING ALBUM</p><h2 id="albumTitle">训练相册</h2></div><button class="icon-button" id="closeAlbumButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header><div class="album-grid" id="albumGrid"></div><div class="empty-list" id="albumEmpty"><i data-lucide="images"></i><strong>还没有营业照</strong><span>记录页每天可以选填一张。</span></div></section>
+  </div>
+
+  <div class="sheet-overlay" id="historySheet" role="dialog" aria-modal="true" aria-labelledby="historyTitle" hidden>
+    <button class="sheet-scrim" id="historyScrim" type="button" aria-label="关闭每日结果"></button>
+    <section class="bottom-sheet bottom-sheet--tall"><header class="sheet-header"><div><p class="eyebrow">DAILY RESULT</p><h2 id="historyTitle">每日结果</h2></div><button class="icon-button" id="closeHistoryButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <div class="history-result-card"><span id="historyStatusBadge">达标</span><strong id="historyDateLabel">--</strong><p id="historyWeightSummary">--</p><div><span>晨间粉丝 <b id="historyMorningFans">+0</b></span><span>晚间粉丝 <b id="historyEveningFans">+0</b></span></div></div>
+      <button class="secondary-button history-detail-toggle" id="historyDetailToggle" type="button"><i data-lucide="list-tree"></i>查看当日记录</button>
+      <div class="history-record-details" id="historyRecordDetails" hidden><section><h3>三餐记录</h3><div id="historyMealList"></div></section><section><h3>运动记录</h3><div class="history-workout-list" id="historyWorkoutList"></div></section><section><h3>喝水记录</h3><p id="historyWaterText">--</p></section><section id="historyMeasurementSection" hidden><h3>围度记录</h3><p id="historyMeasurementText">--</p></section><section id="historyCustomTaskSection" hidden><h3>自定义通告</h3><div id="historyCustomTaskList"></div></section><section id="historyPhotoSection" hidden><h3>营业照</h3><img id="historyPhoto" alt="当日营业照" /></section></div>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="settlementSheet" role="dialog" aria-modal="true" aria-labelledby="settlementTitle" hidden>
+    <button class="sheet-scrim" id="settlementScrim" type="button" aria-label="返回记录"></button>
+    <section class="bottom-sheet settlement-sheet"><header class="sheet-header"><div><p class="eyebrow">END OF DAY</p><h2 id="settlementTitle">结束今日训练？</h2></div><button class="icon-button" id="closeSettlementButton" type="button" aria-label="关闭"><i data-lucide="x"></i></button></header>
+      <div class="settlement-score"><span id="settlementScore">0/3</span><p id="settlementSummary">未完成项目将按未达标结算。</p></div><div class="settlement-list" id="settlementList"></div><p class="sheet-note">确认后今日记录将封档，无法继续修改。</p><button class="primary-button" id="confirmSettlementButton" type="button"><i data-lucide="lock-keyhole"></i>确认结算并封档</button>
+    </section>
+  </div>
+
+  <div class="sheet-overlay" id="fanGrowthSheet" role="dialog" aria-modal="true" aria-labelledby="fanGrowthTitle" hidden>
+    <button class="sheet-scrim" id="fanGrowthScrim" type="button" aria-label="稍后查看"></button>
+    <section class="bottom-sheet fan-growth-sheet"><header class="sheet-header"><div><p class="eyebrow">DAILY WRAP-UP</p><h2 id="fanGrowthTitle">今日训练已收工</h2></div><button class="icon-button" id="closeFanGrowthButton" type="button" aria-label="稍后查看"><i data-lucide="x"></i></button></header>
+      <div class="fan-growth-summary"><span id="fanGrowthPromptLabel">今日新增</span><strong id="fanGrowthPromptDelta">+0</strong><small>训练期粉丝</small></div>
+      <p class="fan-growth-copy" id="fanGrowthPromptCopy">新的粉丝留言已经出现。</p>
+      <div class="daily-return-reminder"><i data-lucide="sunrise"></i><p><strong id="tomorrowReminderTitle">明早 6:00 后再来打卡</strong><span id="tomorrowReminderText">称重后会刷新新的通告和经纪人消息，继续向出道推进。</span></p></div>
+      <button class="secondary-button fan-growth-export" id="exportAfterSettlementButton" type="button"><i data-lucide="download"></i>保存今天的存档文档</button>
+      <p class="sheet-note">请将 TXT 存档保存到手机文件中，下次打开时选择这份文件导入，继续之前的进度。</p>
+      <button class="primary-button" id="viewFanCommentsButton" type="button"><i data-lucide="message-circle"></i>查看今日反馈</button>
+      <button class="text-button fan-growth-later" id="laterFanCommentsButton" type="button">收工，明天见</button>
+    </section>
+  </div>
+
+  <section class="outcome-screen" id="outcomeScreen" aria-labelledby="outcomeTitle" hidden>
+    <header><span class="brand-mark">D:01</span><small>FINAL ANNOUNCEMENT</small></header>
+    <main><span class="outcome-code" id="outcomeCode">DEBUT</span><p id="outcomeEyebrow">ROOKIE PROJECT COMPLETE</p><h1 id="outcomeTitle">正式出道</h1><p id="outcomeCopy">你的第一轮新人训练完成了。</p><div class="outcome-poster"><span>DEBUT OFFICE</span><strong data-stage-name>LUMI</strong><div><p><small>START</small><b id="outcomeStartWeight">--</b></p><i data-lucide="arrow-right"></i><p><small>FINAL</small><b id="outcomeFinalWeight">--</b></p></div><footer><span id="outcomeCompletion">100%</span><span id="outcomeFans">+0 FANS</span></footer></div><div class="extension-picker" id="extensionPicker" hidden><label for="extensionDays">延期天数</label><select id="extensionDays"><option value="3">3 天</option><option value="5">5 天</option><option value="7" selected>7 天</option><option value="10">10 天</option><option value="14">14 天</option></select></div><button class="primary-button" id="outcomePrimaryButton" type="button">保存结果</button><button class="text-button outcome-restart" id="restartPlanButton" type="button" hidden>重新开启新人计划</button></main>
+  </section>
+
+  <div class="confirm-overlay tutorial-overlay" id="firstDayTutorial" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle" hidden>
+    <button class="sheet-scrim" id="tutorialScrim" type="button" aria-label="跳过新手引导"></button>
+    <section class="confirm-card tutorial-card">
+      <header class="tutorial-card__header">
+        <span>DAY 01</span>
+        <div><small>ROOKIE GUIDE</small><h2 id="tutorialTitle">第一天，先熟悉这 3 步</h2></div>
+      </header>
+      <ol class="tutorial-steps">
+        <li><span><i data-lucide="clipboard-check"></i></span><div><small>01 · 看通告</small><strong>先定今天要完成什么</strong><p>默认三餐、运动和喝水，也可以按状态增减，每天至少保留两项。</p></div></li>
+        <li><span><i data-lucide="notebook-pen"></i></span><div><small>02 · 做记录</small><strong>完成任意两项就算达标</strong><p>喝水目标可以调整，围度和营业照都可以选填。</p></div></li>
+        <li><span><i data-lucide="users"></i></span><div><small>03 · 晚上结算</small><strong>结束训练，查看粉丝反馈</strong><p>完成度会影响涨粉、掉粉和粉丝留言。</p></div></li>
+      </ol>
+      <p class="tutorial-note"><i data-lucide="sunrise"></i><span>每天中国时间 6:00 后刷新通告；收工后记得导出 TXT 存档。</span></p>
+      <button class="primary-button tutorial-start-button" id="tutorialStartButton" type="button">知道了，开始第一天<i data-lucide="arrow-right"></i></button>
+      <button class="text-button tutorial-skip-button" id="tutorialSkipButton" type="button">跳过引导</button>
+    </section>
+  </div>
+
+  <div class="confirm-overlay" id="confirmOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden><button class="sheet-scrim" id="confirmScrim" type="button" aria-label="取消"></button><section class="confirm-card"><span class="confirm-icon"><i data-lucide="triangle-alert"></i></span><h2 id="confirmTitle">确认操作？</h2><p id="confirmCopy"></p><div><button class="secondary-button" id="confirmCancelButton" type="button">取消</button><button class="primary-button" id="confirmActionButton" type="button">确认</button></div></section></div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><i data-lucide="check-circle-2"></i><span id="toastText">已保存</span></div>
+
+  <script src="./assets/vendor/lucide.min.js"></script>
+  <script src="./assets/vendor/gsap.min.js"></script>
+  <script src="./assets/storage.js"></script>
+  <script src="./assets/motion.js"></script>
+  <script src="./assets/main.js"></script>
+</body>
+</html>

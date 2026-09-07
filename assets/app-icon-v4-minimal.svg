@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Minimal D:01 rookie project icon</title>
+  <desc id="desc">A minimal black debut project badge with neon lime D:01 lettering.</desc>
+  <rect width="1024" height="1024" rx="184" fill="#090a09"/>
+  <rect x="31" y="31" width="962" height="962" rx="153" fill="none" stroke="#d8ff00" stroke-width="54"/>
+
+  <path d="M150 225V150h152M722 150h152v75M150 799v75h152M722 874h152v-75" fill="none" stroke="#4058f4" stroke-width="32" stroke-linecap="square"/>
+  <text x="512" y="265" text-anchor="middle" fill="#ffffff" font-family="Helvetica Neue, Arial, sans-serif" font-size="46" font-weight="900" letter-spacing="0">ROOKIE PROJECT</text>
+  <text x="526" y="651" text-anchor="middle" fill="#4058f4" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="274" font-weight="900" letter-spacing="0">D:01</text>
+  <text x="500" y="625" text-anchor="middle" fill="#d8ff00" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="274" font-weight="900" letter-spacing="0">D:01</text>
+  <path d="M245 724h534" stroke="#ffffff" stroke-width="22"/>
+  <circle cx="512" cy="798" r="42" fill="#ff6f5d"/>
+  <path d="M512 770v56M484 798h56" stroke="#090a09" stroke-width="14" stroke-linecap="round"/>
+</svg>

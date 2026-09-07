@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">D:01 rookie debut project icon</title>
+  <desc id="desc">A neon lime debut project pass with a blue offset shadow and bold D:01 lettering.</desc>
+  <rect width="1024" height="1024" rx="184" fill="#d8ff00"/>
+  <rect x="31" y="31" width="962" height="962" rx="153" fill="none" stroke="#090a09" stroke-width="54"/>
+
+  <g transform="rotate(-4 512 512)">
+    <rect x="186" y="205" width="690" height="662" rx="90" fill="#4058f4" stroke="#090a09" stroke-width="30"/>
+    <rect x="143" y="157" width="690" height="662" rx="90" fill="#ffffff" stroke="#090a09" stroke-width="30"/>
+
+    <path d="M143 247a90 90 0 0 1 90-90h510a90 90 0 0 1 90 90v42H143Z" fill="#090a09"/>
+    <circle cx="205" cy="224" r="17" fill="#d8ff00"/>
+    <circle cx="255" cy="224" r="17" fill="#4058f4"/>
+    <path d="M744 193v62M713 224h62" stroke="#ffffff" stroke-width="18" stroke-linecap="round"/>
+
+    <text x="488" y="572" text-anchor="middle" fill="#090a09" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="236" font-weight="900" letter-spacing="0">D:01</text>
+    <path d="M219 632H757" stroke="#090a09" stroke-width="18"/>
+    <text x="488" y="706" text-anchor="middle" fill="#4058f4" font-family="Helvetica Neue, Arial, sans-serif" font-size="42" font-weight="900" letter-spacing="0">DEBUT PROJECT</text>
+
+    <path d="M245 760h160" stroke="#090a09" stroke-width="16"/>
+    <path d="M572 760h159" stroke="#090a09" stroke-width="16"/>
+    <circle cx="488" cy="760" r="36" fill="#d8ff00" stroke="#090a09" stroke-width="14"/>
+    <path d="M488 740v40M468 760h40" stroke="#090a09" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>

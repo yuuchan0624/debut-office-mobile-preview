@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Manager debut message icon</title>
+  <desc id="desc">A bold manager message announcing the D-30 rookie debut countdown.</desc>
+  <rect width="1024" height="1024" rx="184" fill="#4058f4"/>
+  <rect x="31" y="31" width="962" height="962" rx="153" fill="none" stroke="#090a09" stroke-width="54"/>
+
+  <rect x="176" y="182" width="690" height="664" rx="86" fill="#090a09"/>
+  <rect x="132" y="136" width="690" height="664" rx="86" fill="#ffffff" stroke="#090a09" stroke-width="30"/>
+
+  <rect x="194" y="198" width="150" height="150" rx="36" fill="#4058f4" stroke="#090a09" stroke-width="24"/>
+  <text x="269" y="307" text-anchor="middle" fill="#ffffff" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="92" font-weight="900">M</text>
+  <text x="391" y="245" fill="#4058f4" font-family="Helvetica Neue, Arial, sans-serif" font-size="38" font-weight="900" letter-spacing="0">MANAGER</text>
+  <path d="M391 282h352" stroke="#090a09" stroke-width="18"/>
+
+  <rect x="194" y="398" width="566" height="220" rx="42" fill="#090a09"/>
+  <text x="477" y="552" text-anchor="middle" fill="#d8ff00" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="184" font-weight="900" letter-spacing="0">D-30</text>
+
+  <rect x="194" y="664" width="566" height="76" rx="22" fill="#d8ff00" stroke="#090a09" stroke-width="12"/>
+  <path d="M638 702h58M677 677l25 25-25 25" fill="none" stroke="#090a09" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="776" cy="154" r="70" fill="#ff6f5d" stroke="#090a09" stroke-width="24"/>
+  <text x="776" y="183" text-anchor="middle" fill="#ffffff" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="82" font-weight="900">1</text>
+</svg>

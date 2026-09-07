@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">D:01 debut spotlight icon</title>
+  <desc id="desc">A rookie debut spotlight above a blue first-stage star.</desc>
+  <rect width="1024" height="1024" rx="184" fill="#f5f6f2"/>
+  <rect x="31" y="31" width="962" height="962" rx="153" fill="none" stroke="#090a09" stroke-width="54"/>
+
+  <path d="M284 192h456l91 568H193Z" fill="#d8ff00" stroke="#090a09" stroke-width="30" stroke-linejoin="round"/>
+  <path d="M353 173h318l45 144H308Z" fill="#090a09"/>
+  <circle cx="512" cy="522" r="206" fill="#4058f4" stroke="#090a09" stroke-width="34"/>
+  <path d="M512 365c22 98 57 133 155 157-98 23-133 58-155 156-23-98-58-133-156-156 98-24 133-59 156-157Z" fill="#ffffff"/>
+  <circle cx="512" cy="522" r="43" fill="#d8ff00" stroke="#090a09" stroke-width="18"/>
+
+  <rect x="174" y="736" width="676" height="146" rx="42" fill="#090a09"/>
+  <text x="512" y="840" text-anchor="middle" fill="#d8ff00" font-family="Arial Black, Helvetica Neue, Arial, sans-serif" font-size="116" font-weight="900" letter-spacing="0">D:01</text>
+  <path d="M179 678h154M691 678h154" stroke="#090a09" stroke-width="24" stroke-linecap="round"/>
+</svg>
